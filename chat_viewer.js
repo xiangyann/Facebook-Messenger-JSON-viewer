@@ -39,9 +39,9 @@ function readJSON(file) {
 }
 
 function cleanData(raw) {
-  var participants = raw.participants.map(person => person.name);
-  var title = raw.title;
-  var msgs = raw.messages.reverse();
+  var participants = raw.participants;
+  var title = raw.threadName;
+  var msgs = raw.messages;
   var cleaned = {
     "participants": participants,
     "title": title,
@@ -90,33 +90,54 @@ function radioClick(name) {
 
 class ChatBubble extends React.Component {
   generateBubbles(msg) {
-    if (msg.sender_name == myName) {
+    if (msg.type === 'media' && msg.media.length > 0) {
+      const mediaElements = msg.media.map((mediaItem, index) => {
+        const extension = mediaItem.uri.split('.').pop().toLowerCase();
+        
+        if (extension === 'mp4' || extension === 'webm') {
+          return e('video', {
+            key: index,
+            controls: true,
+            className: 'media-video',
+            src: mediaItem.uri,
+          });
+        } else if (extension === 'jpg' || extension === 'png' || extension === 'jpeg' || extension === 'gif') {
+          return e('img', {
+            key: index,
+            className: 'media-image',
+            src: mediaItem.uri,
+            alt: 'Image',
+          });
+        }
+      });
+
       return (
         e(
           'div', {className: "message-container"}, 
-          e('div', {className: "name-right"}, msg.sender_name),
-          e('div', {className: "bubble-right"}, msg.content),
-          e('span', {className: "tooltip-right"}, timeConverter(msg.timestamp_ms))
+          e('div', {className: msg.senderName == myName ? "name-right" : "name-left"}, msg.senderName),
+          e('div', {className: msg.senderName == myName ? "bubble-right" : "bubble-left"}, mediaElements),
+          e('span', {className: msg.senderName == myName ? "tooltip-right" : "tooltip-left"}, timeConverter(msg.timestamp))
         )
       );
     } else {
       return (
         e(
           'div', {className: "message-container"}, 
-          e('div', {className: "name-left"}, msg.sender_name),
-          e('div', {className: "bubble-left"}, msg.content),
-          e('span', {className: "tooltip-left"}, timeConverter(msg.timestamp_ms))
+          e('div', {className: msg.senderName == myName ? "name-right" : "name-left"}, msg.senderName),
+          e('div', {className: msg.senderName == myName ? "bubble-right" : "bubble-left"}, msg.text),
+          e('span', {className: msg.senderName == myName ? "tooltip-right" : "tooltip-left"}, timeConverter(msg.timestamp))
         )
       );
     }
-
   }
+
   render() {
     return (
       cleanedData.msgs.map(msg => this.generateBubbles(msg))
-      )
+    )
   }
 }
+
 
 class ChatArea extends React.Component {
   render() {
