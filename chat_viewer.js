@@ -100,6 +100,7 @@ class ChatBubble extends React.Component {
             controls: true,
             className: 'media-video',
             src: mediaItem.uri,
+            alt: 'Video',
           });
         } else if (extension === 'jpg' || extension === 'png' || extension === 'jpeg' || extension === 'gif') {
           return e('img', {
