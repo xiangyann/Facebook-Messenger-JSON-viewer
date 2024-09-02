@@ -99,14 +99,14 @@ class ChatBubble extends React.Component {
             key: index,
             controls: true,
             className: 'media-video',
-            src: mediaItem.uri,
+            src: '',
             alt: 'Video',
           });
         } else if (extension === 'jpg' || extension === 'png' || extension === 'jpeg' || extension === 'gif') {
           return e('img', {
             key: index,
             className: 'media-image',
-            src: mediaItem.uri,
+            src: '',
             alt: 'Image',
           });
         }
