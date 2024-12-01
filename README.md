@@ -54,5 +54,4 @@ Using this Facebook Messenger JSON viewer, it looks much better:
 ![viewer](img/viewer.png)
 
 ## Ideas / TODO
-* Seperate so that gh-pages won't hit the non-existant media files on hosting services.
-
+* None
